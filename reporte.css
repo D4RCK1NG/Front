@@ -1,10 +1,10 @@
 body
 {
   
-    background: url(8.jpg);   
+    background: url(analisis.png);   
     background-size: 100%;
 }
-.box input[type ="text"],[type ="number"]{
+.box input[type ="text"]{
     border: 0;
     background:none;
     display: -moz-stack;

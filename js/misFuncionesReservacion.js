@@ -1,6 +1,6 @@
 function traerInformacion() {
     $.ajax({
-        url: "http://129.151.105.24/api/Reservation/all",
+        url: "http://localhost:8080/api/Reservation/all",
         type: "GET",
         datatype: "JSON",
         success: function (respuesta) {
@@ -19,6 +19,9 @@ function pintarRespuesta(respuesta) {
         myTable += "<td>" + respuesta[i].idReservation + "</td>";
         myTable += "<td>" + respuesta[i].startDate + "</td>";
         myTable += "<td>" + respuesta[i].devolutionDate + "</td>";
+        myTable += '<td> <button class="btn btn-outline-primary "onclick="editarInformacion(' + respuesta[i].id + ')">editar</button></td>';
+        myTable += '<td><button class="btn btn-outline-danger " onclick="borrarElemento(' + respuesta[i].id + ')">eliminar!</button></td>';
+        
         myTable += "</tr>";
     }
     myTable += "</table>";
@@ -34,7 +37,7 @@ function guardarInformacion() {
     };
 
     $.ajax({
-        url: "http://129.151.105.24/api/Reservation/save",
+        url: "http://localhost:8080/api/Reservation/save",
         type: "POST",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(myData),
@@ -65,7 +68,7 @@ function editarInformacion() {
     console.log(myData);
     let dataToSend = JSON.stringify(myData);
     $.ajax({
-        url: "https://129.151.105.24",
+        url: "http://localhost:8080/api/Reservation/update",
         type: "PUT",
         data: dataToSend,
         contentType: "application/JSON",
@@ -78,6 +81,10 @@ function editarInformacion() {
 
             traerInformacion();
             alert("se ha Actualizado")
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            window.location.reload()
+            alert("No se guardo correctamente");
         }
     });
 }
@@ -88,15 +95,22 @@ function borrarElemento(idElemento) {
     };
     let dataToSend = JSON.stringify(myData);
     $.ajax({
-        url: "https://129.151.105.24",
+        url: "http://localhost:8080/api/Reservation/" + idElemento,
         type: "DELETE",
         data: dataToSend,
         contentType: "application/JSON",
         datatype: "JSON",
         success: function (respuesta) {
+            console.log(respuesta);
             $("#resultado").empty();
-            traerInformacion();
             alert("Se ha Eliminado.")
+            window.location.reload()
+            traerInformacion();
+            
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            window.location.reload()
+            alert("No se ha podido eliminar correctamente");
         }
     });
 }
